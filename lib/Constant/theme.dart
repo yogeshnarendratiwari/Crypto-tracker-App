@@ -16,9 +16,8 @@ ThemeData lightTheme = ThemeData(
 
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-    scaffoldBackgroundColor: Colors.black,
+    // scaffoldBackgroundColor: Colors.black45,
     appBarTheme: AppBarTheme(
       elevation: 0,
-      backgroundColor: Colors.black,
     )
 );

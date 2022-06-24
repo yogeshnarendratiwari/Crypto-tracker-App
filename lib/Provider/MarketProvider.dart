@@ -11,7 +11,7 @@ class MarketProvider with ChangeNotifier {
     fetchData();
   }
 
-  void fetchData() async {
+  Future<void> fetchData() async {
     List<dynamic> _markets = await API.getMarkets();
     List<CryptoCurrency> temp = [];
     for (var market in _markets) {
@@ -21,13 +21,7 @@ class MarketProvider with ChangeNotifier {
     markets = temp;
     isLoading = false;
     notifyListeners();
-    Timer(
-        const Duration(
-          seconds: 3,
-        ), () {
-      fetchData();
-      print("Data updated");
-    });
+
   }
   
   CryptoCurrency fetchCryptoById(String id){

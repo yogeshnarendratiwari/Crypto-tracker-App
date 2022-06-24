@@ -2,8 +2,11 @@ import 'package:crypto_tracker/Model/Cryptocurrency.dart';
 import 'package:crypto_tracker/Provider/MarketProvider.dart';
 import 'package:crypto_tracker/Provider/ThemeProvider.dart';
 import 'package:crypto_tracker/Screen/DetailsScreen.dart';
+import 'package:crypto_tracker/Screen/Favorite.dart';
+import 'package:crypto_tracker/Screen/Market.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,15 +16,62 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  late TabController _tabController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    _tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context,listen: false);
+    ThemeProvider themeProvider =
+        Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Coin Trace",
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: themeProvider.themeMode == ThemeMode.light
+                  ? Colors.black87
+                  : Colors.white70),
+        ),
+        backgroundColor: themeProvider.themeMode == ThemeMode.light
+            ? Colors.blueGrey
+            : Colors.black38,
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.account_circle,
+                color: themeProvider.themeMode == ThemeMode.light
+                    ? Colors.black45
+                    : Colors.white70,
+              )),
+          IconButton(
+            onPressed: () {
+              themeProvider.toggleTheme();
+            },
+            icon: themeProvider.themeMode == ThemeMode.light
+                ? Icon(
+                    FontAwesomeIcons.sun,
+                    color: Colors.black45,
+                    size: 22,
+                  )
+                : Icon(
+                    FontAwesomeIcons.moon,
+                    color: Colors.white70,
+                  ),
+          )
+        ],
+      ),
       body: SafeArea(
           child: Container(
         padding: EdgeInsets.only(
-          top: 20,
+          top: 0,
           left: 20,
           right: 20,
           bottom: 0,
@@ -29,90 +79,38 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Welcome back",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Row(
-              children: [
-                Text("Crypto Today", style: TextStyle(fontSize: 40)),
-                IconButton(onPressed: (){
-                  themeProvider.toggleTheme();
+            TabBar(
 
-                }, icon:themeProvider.themeMode == ThemeMode.light ? Icon(Icons.adjust_sharp) : Icon(Icons.add),
-                ) ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Expanded(child: Consumer<MarketProvider>(
-              builder: (context, marketProvider, child) {
-                if (marketProvider.isLoading == true) {
-                  return Center(child: CircularProgressIndicator());
-                } else {
-                  if (marketProvider.markets.length > 0) {
-                    return ListView.builder(
-                        physics: BouncingScrollPhysics(
-                            parent: AlwaysScrollableScrollPhysics()),
-                        itemCount: marketProvider.markets.length,
-                        itemBuilder: (context, index) {
-                          CryptoCurrency currentCrypto =
-                              marketProvider.markets[index];
-                          return ListTile(
-                            onTap: (){
-                             Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreen(id : currentCrypto.id!)));
-                              
-                            }
-                            ,
-                            contentPadding: EdgeInsets.all(0),
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              backgroundImage:
-                                  NetworkImage(currentCrypto.image!),
-                            ),
-                            title: Text(currentCrypto.name! + " #${currentCrypto.marketCapRank}"),
-                            subtitle: Text(currentCrypto.symbol!.toUpperCase()),
-                            trailing: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("₹ " +
-                                    currentCrypto.currentPrice!
-                                        .toStringAsFixed(4)),
-                                Builder(
-                                  builder: (context) {
-                                    double priceChange =
-                                        currentCrypto.price_change_24h!;
-                                    double priceChangePercentage = currentCrypto
-                                        .price_percentage_change_24h!;
+                controller: _tabController,
+                indicatorColor: Colors.blueGrey,
+                tabs:  [
 
-                                    if (priceChange < 0) {
-                                      return Text(
-                                        "${priceChangePercentage.toStringAsFixed(2)} % (${priceChange.toStringAsFixed(4)})",
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                        ),
-                                      );
-                                    } else {
-                                      return Text(
-                                        "+ ${priceChangePercentage.toStringAsFixed(2)} % (+ ${priceChange.toStringAsFixed(4)})",
-                                        style: TextStyle(
-                                          color: Colors.green,
-                                        ),
-                                      );
-                                    }
-                                  },
-                                )
-                              ],
-                            ),
-                          );
-                        });
-                  } else {
-                    return Text("Data not found");
-                  }
-                }
-              },
-            ))
+              Tab(
+               child: Text("Trace",style: TextStyle(color: themeProvider.themeMode == ThemeMode.light
+                   ? Colors.black
+                   : Colors.white,fontWeight: FontWeight.bold,fontSize: 15)),
+              ),
+              Tab(
+                child: Text("Favourite",style: TextStyle(color: themeProvider.themeMode == ThemeMode.light
+                    ? Colors.black
+                    : Colors.white,fontWeight: FontWeight.bold,fontSize: 15)),
+              ),
+
+
+            ]),
+            Expanded(
+              child: TabBarView(
+                physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()
+                ),
+                controller: _tabController,
+                  children: [
+                    Market(),
+                    Favorite(),
+
+                  ]
+              ),
+            )
           ],
         ),
       )),
