@@ -18,7 +18,7 @@ class _MarketState extends State<Market> {
   Widget build(BuildContext context) {
     ThemeProvider themeProvider =
         Provider.of<ThemeProvider>(context, listen: false);
-    return Expanded(child: Consumer<MarketProvider>(
+    return Consumer<MarketProvider>(
       builder: (context, marketProvider, child) {
         if (marketProvider.isLoading == true) {
           return Center(child: CircularProgressIndicator());
@@ -44,12 +44,17 @@ class _MarketState extends State<Market> {
                                     DetailScreen(id: currentCrypto.id!)));
                       },
                       contentPadding: EdgeInsets.all(0),
-                      leading: CircleAvatar(
-                        backgroundColor:
-                            themeProvider.themeMode == ThemeMode.light
-                                ? Colors.black
-                                : Colors.white,
-                        backgroundImage: NetworkImage(currentCrypto.image!),
+                      leading: GestureDetector(
+                        onTap: (){
+
+                        },
+                        child: CircleAvatar(
+                          backgroundColor:
+                              themeProvider.themeMode == ThemeMode.light
+                                  ? Colors.black
+                                  : Colors.white,
+                          backgroundImage: NetworkImage(currentCrypto.image!),
+                        ),
                       ),
                       title: Text(
                         currentCrypto.name!,
@@ -108,6 +113,6 @@ class _MarketState extends State<Market> {
           }
         }
       },
-    ));
+    );
   }
 }

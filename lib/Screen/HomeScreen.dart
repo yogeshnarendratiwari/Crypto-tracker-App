@@ -79,25 +79,25 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TabBar(
-
-                controller: _tabController,
-                indicatorColor: Colors.blueGrey,
-                tabs:  [
-
-              Tab(
-               child: Text("Trace",style: TextStyle(color: themeProvider.themeMode == ThemeMode.light
-                   ? Colors.black
-                   : Colors.white,fontWeight: FontWeight.bold,fontSize: 15)),
-              ),
-              Tab(
-                child: Text("Favourite",style: TextStyle(color: themeProvider.themeMode == ThemeMode.light
-                    ? Colors.black
-                    : Colors.white,fontWeight: FontWeight.bold,fontSize: 15)),
-              ),
-
-
-            ]),
+            // TabBar(
+            //
+            //     controller: _tabController,
+            //     indicatorColor: Colors.blueGrey,
+            //     tabs:  [
+            //
+            //   Tab(
+            //    child: Text("Trace",style: TextStyle(color: themeProvider.themeMode == ThemeMode.light
+            //        ? Colors.black
+            //        : Colors.white,fontWeight: FontWeight.bold,fontSize: 15)),
+            //   ),
+            //   Tab(
+            //     child: Text("Favourite",style: TextStyle(color: themeProvider.themeMode == ThemeMode.light
+            //         ? Colors.black
+            //         : Colors.white,fontWeight: FontWeight.bold,fontSize: 15)),
+            //   ),
+            //
+            //
+            // ]),
             Expanded(
               child: TabBarView(
                 physics: BouncingScrollPhysics(

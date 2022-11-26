@@ -13,7 +13,7 @@ class CryptoCurrency {
   double? circulatingSupply;
   double? ath;
   double? atl;
-
+  bool isFav = false;
   CryptoCurrency(
       {required this.id,
       required this.symbol,
@@ -28,7 +28,8 @@ class CryptoCurrency {
       required this.price_percentage_change_24h,
       required this.circulatingSupply,
       required this.ath,
-      required this.atl});
+      required this.atl,
+      });
 
   factory CryptoCurrency.fromJSON(Map<String, dynamic> map) {
     return CryptoCurrency(
